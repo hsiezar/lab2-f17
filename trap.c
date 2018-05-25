@@ -79,6 +79,19 @@ trap(struct trapframe *tf)
     break;
 
   //PAGEBREAK: 13
+  case T_PGFLT:;
+    uint faultAddi = rcr2();
+    uint stackproc = myproc()->sizeStack + 1;
+    
+    if (faultAddi >= USTACK - ((PGSIZE * stackproc) + 1)) {
+      if (allocuvm(myproc()->pgdir, PGROUNDDOWN(faultAddi), PGROUNDDOWN(faultAddi) + 8) == 0) {
+        break;
+      }
+        cprintf("PAGE FAULT\n");
+        myproc()->sizeStack += 1;
+    }
+  break;
+
   default:
     if(myproc() == 0 || (tf->cs&3) == 0){
       // In kernel, it must be our mistake.
