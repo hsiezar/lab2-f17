@@ -31,7 +31,7 @@ int
 fetchstr(uint addr, char **pp)
 {
   char *s, *ep;
-  struct proc *curproc = myproc();
+  //struct proc *curproc = myproc();
 
   if(addr >= USTACK)
     return -1;
